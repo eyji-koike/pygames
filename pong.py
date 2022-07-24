@@ -3,6 +3,17 @@
 
 import sys
 import turtle
+import os
+
+
+def resource_path(relative_path):
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 # check which system we are on and define the right sound play
@@ -11,10 +22,8 @@ def play_sound(path):
         import winsound
         winsound.PlaySound("{}".format(path), winsound.SND_ASYNC)
     elif sys.platform.startswith('linux'):
-        import os
         os.system("aplay {}&".format(path))
     elif sys.platform.startswith('darwin'):
-        import os
         os.system("afplay {}&".format(path))
 
 
@@ -94,6 +103,9 @@ pen.pen.goto(0, ((window_height / 2) * 0.90))
 score_left = 0
 score_right = 0
 
+wall_bounce_url = resource_path('./sound_effects/wall_bounce.wav')
+paddle_bounce_url = resource_path('./sound_effects/paddle_bounce.wav')
+point_bounce_url = resource_path('./sound_effects/point.wav')
 # main loop
 while True:
     window.update()
@@ -116,31 +128,31 @@ while True:
     if ball.ball.ycor() > ((window_height / 2) - 10):
         ball.ball.sety(((window_height / 2) - 10))
         ball.ball.dy *= -1
-        play_sound('./sound_effects/wall_bounce.wav')
+        play_sound(wall_bounce_url)
     if ball.ball.ycor() < (-(window_height / 2) + 20):
         ball.ball.sety(-(window_height / 2) + 20)
         ball.ball.dy *= -1
-        play_sound('./sound_effects/wall_bounce.wav')
+        play_sound(wall_bounce_url)
     # restart if it goes past the paddle
     if ball.ball.xcor() > ((window_width / 2) - 10):
         ball.ball.goto(0, 0)
         ball.ball.dx *= -1
         score_left += 1
-        play_sound('./sound_effects/point.wav')
+        play_sound(point_bounce_url)
     if ball.ball.xcor() < (-(window_width / 2)):
         ball.ball.goto(0, 0)
         ball.ball.dx *= -1
         score_right += 1
-        play_sound('./sound_effects/point.wav')
+        play_sound(point_bounce_url)
 
     # paddle checks
     if ball.ball.xcor() > ((window_height / 2) + 30) and (
             paddle_right.paddle.ycor() + 40 > ball.ball.ycor() > paddle_right.paddle.ycor() - 40):
         ball.ball.setx((window_height / 2) + 30)
         ball.ball.dx *= -1
-        play_sound('./sound_effects/paddle_bounce.wav')
+        play_sound(paddle_bounce_url)
     if ball.ball.xcor() < (-(window_height / 2) - 30) and (
             paddle_left.paddle.ycor() + 40 > ball.ball.ycor() > paddle_left.paddle.ycor() - 40):
         ball.ball.setx(-(window_height / 2) - 30)
         ball.ball.dx *= -1
-        play_sound('./sound_effects/paddle_bounce.wav')
+        play_sound(paddle_bounce_url)
