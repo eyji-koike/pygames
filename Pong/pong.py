@@ -11,7 +11,7 @@ def resource_path(relative_path):
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
     except Exception:
-        base_path = os.path.abspath(".")
+        base_path = os.path.abspath("..")
 
     return os.path.join(base_path, relative_path)
 
@@ -103,9 +103,9 @@ pen.pen.goto(0, ((window_height / 2) * 0.90))
 score_left = 0
 score_right = 0
 
-wall_bounce_url = resource_path('./sound_effects/wall_bounce.wav')
-paddle_bounce_url = resource_path('./sound_effects/paddle_bounce.wav')
-point_bounce_url = resource_path('./sound_effects/point.wav')
+wall_bounce_url = resource_path('sound_effects/wall_bounce.wav')
+paddle_bounce_url = resource_path('sound_effects/paddle_bounce.wav')
+point_bounce_url = resource_path('sound_effects/point.wav')
 # main loop
 while True:
     window.update()
